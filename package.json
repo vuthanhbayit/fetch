@@ -5,6 +5,9 @@
   "license": "MIT",
   "sideEffects": false,
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
