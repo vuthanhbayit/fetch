@@ -10,9 +10,9 @@ declare module 'axios' {
     $delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>
     $head<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>
     $options<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>
-    $post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>
-    $put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>
-    $patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>
+    $post<T = any, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<T>
+    $put<T = any, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<T>
+    $patch<T = any, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<T>
 
     setBaseURL(baseURL: string): void
     setHeader(name: string, value?: string | false, scopes?: string | string[]): void

@@ -1,40 +1,39 @@
-import type { AxiosInstance, CancelTokenSource } from "axios";
-import Axios from "axios";
+import type { AxiosInstance } from 'axios'
 
-declare module "axios" {
+declare module 'axios' {
   export interface AxiosRequestConfig {
-    cancelId?: string;
+    cancelId?: string
   }
 }
 
 export function createAxiosCancel(axios: AxiosInstance) {
-  const cancelTokenMap = new Map<string, CancelTokenSource>();
+  const controllerMapper = new Map<string, AbortController>()
 
-  axios.interceptors.request.use((config) => {
-    const { cancelId } = config;
+  axios.interceptors.request.use(config => {
+    const { cancelId } = config
 
     if (cancelId) {
-      const oldSource = cancelTokenMap.get(cancelId);
-      if (oldSource) {
-        oldSource.cancel(cancelId);
+      const oldController = controllerMapper.get(cancelId)
+
+      if (oldController) {
+        oldController.abort()
       }
 
-      // eslint-disable-next-line import/no-named-as-default-member
-      const newSource = Axios.CancelToken.source();
-      config.cancelToken = newSource.token;
-      cancelTokenMap.set(cancelId, newSource);
+      const newController = new AbortController()
+      config.signal = newController.signal
+      controllerMapper.set(cancelId, newController)
     }
 
-    return config;
-  });
+    return config
+  })
 
-  axios.interceptors.response.use((response) => {
-    const { cancelId } = response.config;
+  axios.interceptors.response.use(response => {
+    const { cancelId } = response.config
 
     if (cancelId) {
-      cancelTokenMap.delete(cancelId);
+      controllerMapper.delete(cancelId)
     }
 
-    return response;
-  });
+    return response
+  })
 }

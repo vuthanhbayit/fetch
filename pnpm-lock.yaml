@@ -11,6 +11,9 @@ dependencies:
   axios:
     specifier: ^1.5.1
     version: 1.5.1
+  goodspace-fe:
+    specifier: link:/Users/admin/Desktop/think/goodspace-fe
+    version: link:../../think/goodspace-fe
 
 devDependencies:
   '@types/node':
